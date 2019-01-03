@@ -114,7 +114,14 @@ public class StationsApiController implements StationsApi {
 	@Override
 	public ResponseEntity<Station> updateStation(@PathVariable("stationId") final UUID stationId,
 			@Valid @RequestBody final Station station) {
-		return new ResponseEntity<Station>(HttpStatus.NOT_IMPLEMENTED);
+		try {
+			final Station returnObject = this.stationService.updateStation(stationId, station);
+			return ResponseEntity.ok().body(returnObject);
+		} catch (final StationApiException e) {
+			return new ResponseEntity<Station>(e.getHttpStatus());
+		} catch (final Exception e) {
+			return new ResponseEntity<Station>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }
