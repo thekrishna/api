@@ -20,6 +20,11 @@ import com.kk.api.station.StationApiApplication;
 import com.kk.api.station.model.StationDBModel;
 import com.kk.api.station.repository.StationRepository;
 
+/**
+ * 
+ * @author Krishna Kumar
+ *
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = { StationApiApplication.class })
 public class StationRepositoryTest {

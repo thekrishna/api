@@ -7,6 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
+/**
+ * 
+ * @author Krishna Kumar
+ *
+ */
 @Entity
 @Table(name = "station")
 public class StationDBModel {

@@ -17,6 +17,11 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 import com.kk.api.station.transform.StationTransformer;
 
+/**
+ * 
+ * @author Krishna Kumar
+ *
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = { "com.kk.api.station" })
 public class StationConfiguration {
