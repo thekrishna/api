@@ -2,6 +2,7 @@ package com.kk.core.java.examples;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -10,10 +11,10 @@ import org.junit.Test;
  */
 public class InterchangeDiagonalsTest {
 	
-	private InterchangeDiagonals interchangeDiagonals ;
+	private static InterchangeDiagonals interchangeDiagonals ;
 	
 	@BeforeClass
-	public void init() {
+	public static void  init() {
 		interchangeDiagonals = new InterchangeDiagonals();
 	}
 
