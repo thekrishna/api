@@ -23,7 +23,7 @@ public class InterchangeDiagonals {
 			System.out.println("\nMatrix after interchanging diagonals");
 			obj.printMatrix(matrix);
 		} catch (final Exception e) {
-			e.printStackTrace();
+			System.out.println("Exception occured while interchanging the diagonals."+e.getLocalizedMessage());
 		}
 	}
 	
@@ -32,7 +32,7 @@ public class InterchangeDiagonals {
 	 * 
 	 * @param matrix
 	 */
-	String[][] readMatrix() throws Exception {
+	String[][] readMatrix(){
 		int n = 0;
 		String matrix[][];
 		try (final Scanner s = new Scanner(System.in)) {
