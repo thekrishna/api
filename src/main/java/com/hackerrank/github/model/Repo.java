@@ -1,6 +1,13 @@
 package com.hackerrank.github.model;
 
-public class Repo {
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table
+public class Repo{
+	@Id
     private Long id;
     private String name;
     private String url;

@@ -2,10 +2,20 @@ package com.hackerrank.github.model;
 
 import java.sql.Timestamp;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table
 public class Event {
+	@Id
     private Long id;
     private String type;
+    @OneToOne
     private Actor actor;
+    @OneToOne
     private Repo repo;
     private Timestamp createdAt;
 
