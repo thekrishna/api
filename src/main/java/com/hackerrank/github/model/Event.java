@@ -2,9 +2,11 @@ package com.hackerrank.github.model;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -13,9 +15,9 @@ public class Event {
 	@Id
     private Long id;
     private String type;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Actor actor;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Repo repo;
     private Timestamp createdAt;
 
