@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
 import java.util.List;
 import com.hackerrank.github.exception.RecordAlreadyExistException;
 import com.hackerrank.github.model.Event;
@@ -50,7 +52,7 @@ public class GithubApiRestController {
 	@GetMapping("/events/repos/{repoID}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<Event> getAllEventsByRepoId(@PathVariable Long repoId){
-		return (List<Event>) this.eventRepository.findAllOrderById();
+		return new ArrayList<>();
 	}
 	
 }
