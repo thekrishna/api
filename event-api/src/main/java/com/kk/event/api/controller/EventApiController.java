@@ -1,10 +1,8 @@
 package com.kk.event.api.controller;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kk.event.api.exception.RecordAlreadyExistException;
+import com.kk.event.api.exception.RecordNotFoundException;
 import com.kk.event.api.model.Actor;
 import com.kk.event.api.model.Event;
 import com.kk.event.api.model.Repo;
@@ -84,7 +83,7 @@ public class EventApiController {
 
 	@GetMapping("/events/repos/{repoID}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<Event> getAllEventsByRepoId(@PathVariable Long repoID) {
+	public List<Event> getEventsByRepoId(@PathVariable Long repoID) {
 		final List<Event> events = new ArrayList<>();
 		final Iterable<Event> iterable = this.eventRepository.findByRepoId(repoID);
 		iterable.forEach(event -> events.add(event));
@@ -93,7 +92,7 @@ public class EventApiController {
 
 	@GetMapping("/events/actors/{actorID}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<Event> getAllEventsByActorId(@PathVariable Long actorID) {
+	public List<Event> getEventsByActorId(@PathVariable Long actorID) {
 		final List<Event> events = new ArrayList<>();
 		final Iterable<Event> iterable = this.eventRepository.findByActorId(actorID);
 		iterable.forEach(event -> events.add(event));
@@ -102,8 +101,8 @@ public class EventApiController {
 
 	@GetMapping("/events/repos/{repoID}/actors/{actorID}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<Event> getAllEventsByRepoIdAndActorId(@PathVariable Long repoID, @PathVariable Long actorID) {
-		final List<Event> events = (List<Event>) this.eventRepository.findByRepoIdAndActorId(repoID, actorID);
-		return events.stream().sorted(Comparator.comparing(Event::getId)).collect(Collectors.toList());
+	public Event getEventByRepoIdAndActorId(@PathVariable Long repoID, @PathVariable Long actorID) {
+		return this.eventRepository.findByRepoIdAndActorId(repoID, actorID)
+				.orElseThrow(()-> new RecordNotFoundException("Event not found for ActorId and RepoId"));
 	}
 }
