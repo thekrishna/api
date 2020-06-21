@@ -1,5 +1,6 @@
 package com.kk.event.api.controller;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -75,19 +76,28 @@ public class EventApiController {
 	@GetMapping("/events")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<Event> getAllEvents() {
-		return (List<Event>) this.eventRepository.findAll(new Sort("id"));
+		final List<Event> events = new ArrayList<>();
+		final Iterable<Event> iterable = this.eventRepository.findAll(new Sort("id"));
+		iterable.forEach(event -> events.add(event));
+		return events;
 	}
 
 	@GetMapping("/events/repos/{repoID}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<Event> getAllEventsByRepoId(@PathVariable Long repoID) {
-		return (List<Event>) this.eventRepository.findByRepoId(repoID);
+		final List<Event> events = new ArrayList<>();
+		final Iterable<Event> iterable = this.eventRepository.findByRepoId(repoID);
+		iterable.forEach(event -> events.add(event));
+		return events;
 	}
 
 	@GetMapping("/events/actors/{actorID}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<Event> getAllEventsByActorId(@PathVariable Long actorID) {
-		return (List<Event>) this.eventRepository.findByActorId(actorID);
+		final List<Event> events = new ArrayList<>();
+		final Iterable<Event> iterable = this.eventRepository.findByActorId(actorID);
+		iterable.forEach(event -> events.add(event));
+		return events;
 	}
 
 	@GetMapping("/events/repos/{repoID}/actors/{actorID}")
