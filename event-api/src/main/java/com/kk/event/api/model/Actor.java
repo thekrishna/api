@@ -51,4 +51,5 @@ public class Actor {
 	public void setAvatar(String avatar) {
 		this.avatar = avatar;
 	}
+
 }

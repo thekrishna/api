@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kk.event.api.exception.RecordAlreadyExistException;
+import com.kk.event.api.model.Actor;
 import com.kk.event.api.model.Event;
+import com.kk.event.api.model.Repo;
 import com.kk.event.api.repository.ActorRepository;
 import com.kk.event.api.repository.EventRepository;
 import com.kk.event.api.repository.RepoRepository;
@@ -50,8 +52,23 @@ public class EventApiController {
 		if (optionalEvent.isPresent()) {
 			throw new RecordAlreadyExistException(String.format("Event already exist for this %s id", event.getId()));
 		}
-		this.actorRepository.save(event.getActor());
-		this.repoRepository.save(event.getRepo());
+
+		final Optional<Actor> optActor = this.actorRepository.findById(event.getActor().getId());
+		if (optActor.isPresent()) {
+			event.setActor(optActor.get());
+		} else {
+			this.actorRepository.save(event.getActor());
+			// Either save Actor or throw Foreign Key Actor does not exist.
+		}
+
+		final Optional<Repo> opRepo = this.repoRepository.findById(event.getRepo().getId());
+		if (opRepo.isPresent()) {
+			event.setRepo(opRepo.get());
+		} else {
+			this.repoRepository.save(event.getRepo());
+			// Either save Repo or throw Foreign Key Repo does not exist.
+		}
+
 		return this.eventRepository.save(event);
 	}
 
@@ -64,18 +81,18 @@ public class EventApiController {
 	@GetMapping("/events/repos/{repoID}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<Event> getAllEventsByRepoId(@PathVariable Long repoID) {
-		return(List<Event>) this.eventRepository.findByRepoId(repoID);
+		return (List<Event>) this.eventRepository.findByRepoId(repoID);
 	}
-	
+
 	@GetMapping("/events/actors/{actorID}")
 	@ResponseStatus(code = HttpStatus.OK)
 	public List<Event> getAllEventsByActorId(@PathVariable Long actorID) {
 		return (List<Event>) this.eventRepository.findByActorId(actorID);
 	}
-	
+
 	@GetMapping("/events/repos/{repoID}/actors/{actorID}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public List<Event> getAllEventsByRepoIdAndActorId(@PathVariable Long repoID,@PathVariable Long actorID) {
+	public List<Event> getAllEventsByRepoIdAndActorId(@PathVariable Long repoID, @PathVariable Long actorID) {
 		final List<Event> events = (List<Event>) this.eventRepository.findByRepoIdAndActorId(repoID, actorID);
 		return events.stream().sorted(Comparator.comparing(Event::getId)).collect(Collectors.toList());
 	}
