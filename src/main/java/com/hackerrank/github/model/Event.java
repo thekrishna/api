@@ -1,6 +1,6 @@
 package com.hackerrank.github.model;
 
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
@@ -26,12 +27,13 @@ public class Event {
 	private Repo repo;
 	@Column(name = "createdAt")
 	@JsonProperty("created_at")
-	private Timestamp createdAt;
+	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss")
+	private LocalDateTime createdAt;
 
 	public Event() {
 	}
 
-	public Event(Long id, String type, Actor actor, Repo repo, Timestamp createdAt) {
+	public Event(Long id, String type, Actor actor, Repo repo, LocalDateTime createdAt) {
 		this.id = id;
 		this.type = type;
 		this.actor = actor;
@@ -71,11 +73,11 @@ public class Event {
 		this.repo = repo;
 	}
 
-	public Timestamp getCreatedAt() {
+	public LocalDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(Timestamp createdAt) {
+	public void setCreatedAt(LocalDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 }
