@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table
 public class Event {
@@ -23,6 +25,7 @@ public class Event {
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private Repo repo;
 	@Column(name = "createdAt")
+	@JsonProperty("created_at")
 	private Timestamp createdAt;
 
 	public Event() {

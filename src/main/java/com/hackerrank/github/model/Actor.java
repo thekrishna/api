@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 @Table
 public class Actor {
@@ -14,6 +16,7 @@ public class Actor {
 	@Column(name = "login")
 	private String login;
 	@Column(name = "avatar")
+	@JsonProperty("avatar_url")
 	private String avatar;
 
 	public Actor() {
