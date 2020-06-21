@@ -1,4 +1,4 @@
-package com.hackerrank.github;
+package com.kk.event.api;
 
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;

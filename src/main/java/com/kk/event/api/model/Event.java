@@ -1,4 +1,4 @@
-package com.hackerrank.github.model;
+package com.kk.event.api.model;
 
 import java.time.LocalDateTime;
 
@@ -7,7 +7,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,15 +21,23 @@ public class Event {
 	@Id
 	@Column(name = "id")
 	private Long id;
+
 	@Column(name = "type")
 	private String type;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "actorId")
+	@OrderBy("id ASC")
 	private Actor actor;
-	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "repoId")
+	@OrderBy("id ASC")
 	private Repo repo;
+
 	@Column(name = "createdAt")
 	@JsonProperty("created_at")
-	@JsonFormat( pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private LocalDateTime createdAt;
 
 	public Event() {

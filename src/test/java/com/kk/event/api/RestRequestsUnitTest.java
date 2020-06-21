@@ -1,8 +1,10 @@
-package com.hackerrank.github;
+package com.kk.event.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kk.event.api.Application;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;

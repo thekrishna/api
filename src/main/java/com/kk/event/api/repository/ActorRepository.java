@@ -1,8 +1,9 @@
-package com.hackerrank.github.repository;
+package com.kk.event.api.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import com.hackerrank.github.model.Actor;
+
+import com.kk.event.api.model.Actor;
 
 @Repository
 public interface ActorRepository extends CrudRepository<Actor,Long>{

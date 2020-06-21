@@ -1,4 +1,4 @@
-package com.hackerrank.github.model;
+package com.kk.event.api.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
