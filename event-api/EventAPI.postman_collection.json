@@ -1,0 +1,231 @@
+{
+	"info": {
+		"_postman_id": "c350e59f-7c55-4b98-8624-711acadb99e9",
+		"name": "EventAPI",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "POST - Record1",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept-Charset",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 3774098728,\n    \"type\": \"PushEvent\",\n    \"actor\": {\n        \"id\": 2375455,\n        \"login\": \"michael73\",\n        \"avatar_url\": \"https://avatars.com/2375455\"\n    },\n    \"repo\": {\n        \"id\": 363748,\n        \"name\": \"michael73/maxime-nisi-hic\",\n        \"url\": \"https://github.com/michael73/maxime-nisi-hic\"\n    },\n    \"created_at\": \"2015-06-29 03:13:31\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST - Record2",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "Accept-Charset",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 3595267878,\n    \"type\": \"PushEvent\",\n    \"actor\": {\n        \"id\": 1885650,\n        \"login\": \"michelle13\",\n        \"avatar_url\": \"https://avatars.com/1885650\"\n    },\n    \"repo\": {\n        \"id\": 295411,\n        \"name\": \"victorhenderson/delectus-vel\",\n        \"url\": \"https://github.com/victorhenderson/delectus-vel\"\n    },\n    \"created_at\": \"2015-04-27 18:13:31\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8000/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/events",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE Events",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/erase/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"erase",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Events by RepoId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/events/repos/363748",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"repos",
+						"363748"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Actors by ActorId",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/events/actors/2375455",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"actors",
+						"2375455"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Events By Repo & Actor",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/events/repos/363748/actors/2375455",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"events",
+						"repos",
+						"363748",
+						"actors",
+						"2375455"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Pagination",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/model?offset=0&limit=10&sortBy=name",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"model"
+					],
+					"query": [
+						{
+							"key": "offset",
+							"value": "0"
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						},
+						{
+							"key": "sortBy",
+							"value": "name"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
