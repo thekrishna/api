@@ -1,5 +1,6 @@
 package com.hackerrank.github.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -8,8 +9,11 @@ import javax.persistence.Table;
 @Table
 public class Repo{
 	@Id
+	@Column(name = "id")
     private Long id;
+	@Column(name = "name")
     private String name;
+    @Column(name = "url")
     private String url;
 
     public Repo() {
