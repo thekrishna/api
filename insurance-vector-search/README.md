@@ -1,11 +1,4 @@
-# lyric-semantic-search
-This repo is support the [Building a Semantic Search Service With Spring AI and MongoDB Atlas](https://www.mongodb.com/developer/languages/java/spring-ai-mongodb-atlas/) tutorial.
-
-Spring AI is an application framework from [Spring](https://spring.io/) that allows you to combine various AI services and plugins with your applications. With support for many chat, text-to-image, and embedding models, you can get your AI powered Java application set up for a variety of AI use cases.
-
-With Spring AI, MongoDB Atlas is supported as a vector database, all with [Atlas Vector Search](https://www.mongodb.com/products/platform/atlas-vector-search) to power your semantic search and implement your RAG applications. To learn more about RAG and other key concepts in AI, check out the [MongoDB AI integration docs](https://www.mongodb.com/docs/atlas/atlas-vector-search/ai-integrations/#std-label-ai-key-concepts).
-
-In this tutorial, we’ll go through what you need to get started with Spring AI and MongoDB. Adding documents to your database with the vectorised content (embeddings), and searching this content with semantic search. The full code for this tutorial is available in this [Github repository](https://github.com/timotheekelly/lyric-semantic-search).
+# semantic-search
 
 ## Prerequisites
 Before starting this tutorial, you'll need to have the following:
