@@ -1,0 +1,17 @@
+{
+  "documentId": "AUTO-2001",
+  "policyId": "POL-20001",
+  "applicantId": "APP-20001",
+  "lob": "AUTO",
+  "documentType": "VEHICLE_INSPECTION",
+  "pages": [
+    {
+      "pageNumber": 1,
+      "text": "Vehicle: Toyota Camry. Model year: 2021. Mileage: 42000 miles."
+    },
+    {
+      "pageNumber": 2,
+      "text": "Front bumper damage observed. Previous collision accident reported in 2023."
+    }
+  ]
+}

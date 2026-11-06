@@ -1,0 +1,21 @@
+{
+  "documentId": "PROP-1001",
+  "policyId": "POL-10001",
+  "applicantId": "APP-10001",
+  "lob": "PROPERTY",
+  "documentType": "PROPERTY_INSPECTION",
+  "pages": [
+    {
+      "pageNumber": 1,
+      "text": "Property type: Residential. Construction year: 1995. Construction type: Wood frame."
+    },
+    {
+      "pageNumber": 2,
+      "text": "Roof shows signs of aging. Minor water leakage observed in basement. Electrical wiring requires further inspection."
+    },
+    {
+      "pageNumber": 3,
+      "text": "Previous water damage claim reported in 2022. Claim amount was $12000."
+    }
+  ]
+}

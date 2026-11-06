@@ -1,0 +1,18 @@
+-----------------------------------------------------------------------------------
+DB : insurance_db
+Collection : insurance_documents
+Index Name : insurance_vector_index
+-----------------------------------------------------------------------------------
+Question:
+Find properties with previous water damage.
+             ↓
+Spring AI EmbeddingModel
+             ↓
+Query vector (1536 dimensions)
+             ↓
+MongoDB $vectorSearch
+             ↓
+Retrieve matching OCR chunks
+             ↓
+Return document ID + policy ID + page number + text
+-----------------------------------------------------------------------------------
