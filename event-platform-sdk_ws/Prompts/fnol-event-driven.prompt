@@ -1,0 +1,621 @@
+Below is a comprehensive GitHub Copilot Agent prompt you can paste into VS Code Copilot Chat in Agent Mode.
+
+The prompt is designed to make Copilot inspect your existing Event Platform SDK, understand its core modules and extension patterns, and implement a property insurance domain on top of the existing platform rather than rebuilding the event infrastructure.
+
+# GitHub Copilot Agent Prompt – Property Insurance Claims Event Platform
+
+Ready to use Agent Mode
+
+Writing
+
+# Role and Objective
+
+Act as a Senior Enterprise Solution Architect, Java Spring Boot Developer, Event-Driven Architecture Specialist, and Property Insurance Domain Expert.
+
+I have an existing Event Platform SDK containing reusable core modules for event publishing, event consumption, event models, serialization, configuration, error handling, and event processing.
+
+Your task is to extend this existing Event Platform SDK by implementing a complete Property Insurance Claims domain-specific event-driven solution.
+
+**IMPORTANT: Do not rebuild or duplicate the existing core Event Platform SDK functionality. Reuse and extend its existing abstractions, interfaces, base classes, annotations, configurations, producer frameworks, consumer frameworks, and utilities.**
+
+Insurance claim lifecycle
+---------------------------
+The business objective is to automate the complete property insurance claim lifecycle, starting when a customer reports property damage through First Notice of Loss (FNOL), and ending when the claim is settled and payment is successfully completed.
+
+# 1\. First Understand the Existing Codebase
+
+Before writing code, inspect the entire repository and identify:
+
+1. Existing Event Platform SDK modules and their responsibilities.
+2. Core event model interfaces and base classes.
+3. Existing producer interfaces and implementations.
+4. Existing consumer interfaces and implementations.
+5. Event serialization and deserialization mechanisms.
+6. Kafka producer and consumer configuration.
+7. Event metadata and header management.
+8. Event schema and versioning conventions.
+9. Exception handling and retry mechanisms.
+10. Dead Letter Queue implementation.
+11. Logging, tracing, and correlation ID implementation.
+12. Existing testing frameworks and test conventions.
+13. Existing dependency injection and configuration patterns.
+14. Existing documentation and sample implementations.
+
+Identify the correct extension points for a new business domain.
+
+Do not assume any class names, package names, method signatures, or SDK capabilities without inspecting the repository.
+
+# 2\. Architecture and Implementation Principles
+
+Follow these principles:
+
+- Extend the existing core SDK modules wherever appropriate.
+- Keep the core Event Platform SDK independent of insurance business logic.
+- Implement property insurance functionality in separate domain-specific modules.
+- Reuse the existing producer and consumer frameworks.
+- Reuse the existing event envelope and metadata conventions.
+- Follow the existing coding and package structure.
+- Avoid duplicate Kafka configurations.
+- Avoid introducing unnecessary dependencies.
+- Use dependency inversion and clean architecture.
+- Ensure domain-specific events are independent of transport implementation.
+- Follow existing Java and Spring Boot versions.
+- Maintain backward compatibility with existing SDK consumers.
+- Make all business workflows event-driven.
+- Implement idempotent event processing.
+- Include meaningful unit and integration tests.
+
+If the SDK does not provide a required capability, identify the gap and implement the smallest compatible extension. Document the reason for every new core-level abstraction.
+
+# 3\. Proposed Domain-Specific Module Structure
+
+Adapt this structure to the actual repository conventions.
+
+property-insurance-domain/ │ ├── property-insurance-model/ │ ├── event/ │ ├── payload/ │ ├── metadata/ │ ├── enumeration/ │ └── constants/ │ ├── property-insurance-producer/ │ ├── fnol/ │ ├── policy/ │ ├── claim/ │ ├── assessment/ │ ├── settlement/ │ └── payment/ │ ├── property-insurance-consumer/ │ ├── fnol/ │ ├── policy/ │ ├── claim/ │ ├── assessment/ │ ├── settlement/ │ └── payment/ │ ├── property-insurance-service/ │ ├── application/ │ ├── domain/ │ ├── repository/ │ └── configuration/ │ └── property-insurance-tests/
+
+The modules must extend the existing SDK abstractions rather than recreate them.
+
+# 4\. Property Insurance Business Domain
+
+Implement the following domain entities and their relationships.
+
+## Core domain models
+
+- PropertyPolicy
+- InsuredProperty
+- Customer
+- FNOL
+- InsuranceClaim
+- ClaimAssignment
+- LossAdjuster
+- DamageAssessment
+- ClaimDocument
+- ClaimSettlement
+- ClaimPayment
+- ClaimHistory
+
+Define appropriate attributes, identifiers, enums, relationships, validation rules, and lifecycle statuses.
+
+Use BigDecimal for financial values.
+
+Use Instant or the date/time conventions already established by the SDK.
+
+Do not expose sensitive personal information unnecessarily in event payloads.
+
+# 5\. Event Model and Event Payload Design
+
+Create domain-specific event models by extending or implementing the existing core SDK event abstraction.
+
+Do not create a duplicate generic event envelope if the platform already provides one.
+
+Each event should follow the SDK's conventions for:
+
+- Event ID
+- Event type
+- Event version
+- Event timestamp
+- Source system
+- Correlation ID
+- Causation ID
+- Aggregate ID
+- Partition key
+- Domain-specific payload
+
+Create strongly typed event payload classes.
+
+Use immutable models where consistent with the SDK.
+
+Implement schema versioning and backward compatibility.
+
+## Required business events
+
+### FNOL events
+
+1. FNOLSubmitted
+2. FNOLUpdated
+3. FNOLDocumentUploaded
+4. FNOLValidated
+5. FNOLRejected
+
+### Policy events
+
+6. PolicyValidationRequested
+7. PolicyValidated
+8. PolicyRejected
+9. CoverageVerified
+
+### Claim events
+
+10. ClaimCreationRequested
+11. ClaimCreated
+12. ClaimUpdated
+13. ClaimRejected
+14. ClaimClosed
+
+### Adjuster events
+
+15. AdjusterAssignmentRequested
+16. AdjusterAssigned
+17. AdjusterAssignmentFailed
+
+### Damage assessment events
+
+18. DamageAssessmentRequested
+19. DamageAssessmentStarted
+20. DamageAssessmentCompleted
+21. DamageAssessmentRejected
+
+### Settlement events
+
+22. SettlementCalculationRequested
+23. SettlementCalculated
+24. SettlementApprovalRequested
+25. ClaimApproved
+26. ClaimRejected
+
+### Payment events
+
+27. PaymentRequested
+28. PaymentProcessingStarted
+29. PaymentProcessed
+30. PaymentFailed
+31. PaymentReconciled
+
+### Final lifecycle events
+
+32. ClaimSettled
+33. ClaimSettlementFailed
+34. CustomerNotificationRequested
+
+For each event:
+
+- Create a dedicated event payload model.
+- Define mandatory and optional fields.
+- Include validation rules.
+- Document the producer.
+- Document the consumers.
+- Define the business meaning.
+- Identify the expected subsequent events.
+
+# 6\. Event Payload Examples
+
+Use these as business examples and adapt the envelope to the existing SDK.
+
+## FNOLSubmitted
+
+Payload:
+
+{ "fnolId": "FNOL10001", "policyId": "POL20001", "propertyId": "PROP40001", "customerReference": "CUS30001", "damageType": "STORM", "incidentDate": "2026-11-07", "reportedDate": "2026-11-08", "description": "Roof damaged due to severe storm", "estimatedLoss": 15000.00, "currency": "USD", "locationReference": "PROPERTY\_LOCATION\_01" }
+
+## PolicyValidated
+
+Payload:
+
+{ "fnolId": "FNOL10001", "policyId": "POL20001", "policyStatus": "ACTIVE", "coverageType": "HOMEOWNERS", "coverageLimit": 250000.00, "deductible": 1000.00, "coverageConfirmed": true }
+
+## ClaimCreated
+
+Payload:
+
+{ "claimId": "CLM30001", "fnolId": "FNOL10001", "policyId": "POL20001", "claimType": "PROPERTY\_DAMAGE", "claimStatus": "OPEN", "estimatedLoss": 15000.00, "currency": "USD" }
+
+## DamageAssessmentCompleted
+
+Payload:
+
+{ "assessmentId": "ASM60001", "claimId": "CLM30001", "damageType": "ROOF\_DAMAGE", "approvedRepairEstimate": 12000.00, "currency": "USD", "assessmentStatus": "COMPLETED" }
+
+## SettlementCalculated
+
+Payload:
+
+{ "claimId": "CLM30001", "approvedDamageAmount": 12000.00, "deductible": 1000.00, "depreciation": 0.00, "settlementAmount": 11000.00, "currency": "USD" }
+
+## PaymentProcessed
+
+Payload:
+
+{ "paymentId": "PAY70001", "claimId": "CLM30001", "paymentAmount": 11000.00, "currency": "USD", "paymentStatus": "SUCCESS", "paymentReference": "PAYREF70001" }
+
+## ClaimSettled
+
+Payload:
+
+{ "claimId": "CLM30001", "fnolId": "FNOL10001", "settlementAmount": 11000.00, "currency": "USD", "claimStatus": "SETTLED", "paymentId": "PAY70001" }
+
+Use appropriate Java classes, enums, validation annotations, and serialization support.
+
+# 7\. Domain-Specific Event Producers
+
+Implement producer classes using the existing Event Platform SDK producer abstractions.
+
+Expected producer responsibilities:
+
+- FnolEventProducer
+- PolicyEventProducer
+- ClaimEventProducer
+- AdjusterEventProducer
+- DamageAssessmentEventProducer
+- SettlementEventProducer
+- PaymentEventProducer
+- NotificationEventProducer
+
+Each producer must:
+
+1. Extend or implement the appropriate SDK producer abstraction.
+2. Accept strongly typed domain event models.
+3. Populate event metadata using existing SDK utilities.
+4. Publish through the existing event publishing mechanism.
+5. Apply the existing serialization strategy.
+6. Use the correct topic and partition key.
+7. Propagate correlation and causation identifiers.
+8. Handle publishing failures using SDK mechanisms.
+9. Avoid business logic unrelated to event creation and publication.
+10. Provide testable interfaces.
+
+Do not create direct KafkaTemplate usage if the SDK already provides a reusable producer abstraction.
+
+# 8\. Domain-Specific Event Consumers
+
+Implement consumers using existing SDK consumer interfaces, annotations, or base classes.
+
+Expected consumers:
+
+- FnolEventConsumer
+- PolicyEventConsumer
+- ClaimEventConsumer
+- AdjusterEventConsumer
+- DamageAssessmentEventConsumer
+- SettlementEventConsumer
+- PaymentEventConsumer
+- NotificationEventConsumer
+
+Each consumer must:
+
+1. Subscribe using the existing SDK configuration mechanism.
+2. Deserialize events into strongly typed models.
+3. Validate event metadata and payload.
+4. Perform the appropriate domain operation.
+5. Persist business state where required.
+6. Publish subsequent domain events through the existing producer abstractions.
+7. Handle duplicate event delivery safely.
+8. Support retry and dead-letter mechanisms.
+9. Log correlation ID and claim ID.
+10. Avoid blocking other independent event consumers.
+
+Do not put business logic directly into the consumer infrastructure layer.
+
+Use application services or domain services for business processing.
+
+# 9\. Complete FNOL-to-Settlement Workflow
+
+Implement the following event-driven sequence.
+
+STEP 1: Customer submits FNOL.
+
+FNOL API → FNOL Service → FNOLSubmitted → Kafka
+
+STEP 2: Validate property insurance policy.
+
+PolicyEventConsumer → Policy Validation Service → PolicyValidated / PolicyRejected
+
+STEP 3: Create claim.
+
+ClaimEventConsumer → Claim Application Service → Claim Repository → ClaimCreated
+
+STEP 4: Assign loss adjuster.
+
+AdjusterEventConsumer → Adjuster Assignment Service → AdjusterAssigned
+
+STEP 5: Perform damage assessment.
+
+DamageAssessmentEventConsumer → Damage Assessment Service → DamageAssessmentCompleted
+
+STEP 6: Calculate settlement.
+
+SettlementEventConsumer → Settlement Calculation Service → SettlementCalculated
+
+STEP 7: Obtain claim approval.
+
+Approval Service → ClaimApproved / ClaimRejected
+
+STEP 8: Process payment.
+
+PaymentEventConsumer → Payment Service → PaymentProcessed / PaymentFailed
+
+STEP 9: Close the claim.
+
+ClaimEventConsumer → ClaimSettled
+
+STEP 10: Notify the customer.
+
+NotificationEventConsumer → Email / SMS / Customer Portal Notification
+
+Ensure that each step is independently testable and driven by business events.
+
+# 10\. Event Topic Configuration
+
+Create topic definitions and configuration using the existing SDK conventions.
+
+Suggested topics:
+
+- property.fnol.events
+- property.policy.events
+- property.claim.events
+- property.adjuster.events
+- property.assessment.events
+- property.settlement.events
+- property.payment.events
+- property.notification.events
+
+Avoid hardcoding topic names throughout the application.
+
+Use centralized configuration or the SDK's existing topic registration mechanism.
+
+Use claimId as the Kafka partition key for claim lifecycle events after claim creation. Use fnolId before claim creation.
+
+# 11\. Reliability and Error Handling
+
+Reuse existing platform reliability mechanisms.
+
+Implement or extend the following where necessary:
+
+- Idempotent event consumers.
+- Duplicate event detection.
+- Transactional outbox for reliable event publication.
+- Retry policies.
+- Dead Letter Queue handling.
+- Event schema validation.
+- Event version compatibility.
+- Correlation ID propagation.
+- Causation ID propagation.
+- Structured logging.
+- Event processing audit history.
+
+Ensure payment processing is idempotent and does not produce duplicate financial transactions.
+
+Do not assume Kafka transactions alone provide atomic consistency across external databases and payment gateways.
+
+For a failed payment, maintain the approved claim state and support payment retry and reconciliation.
+
+# 12\. Business Validation Rules
+
+Implement domain validations such as:
+
+- FNOL must reference an existing policy.
+- Policy must be active for the relevant incident date.
+- Insured property must match the policy.
+- Incident date must satisfy policy terms.
+- Duplicate claims must be detected or flagged for investigation.
+- Claim amount must be non-negative.
+- Assessment must be completed before settlement calculation.
+- Approval must be obtained before payment.
+- Payment amount must not exceed the approved settlement.
+- Claim must not be marked SETTLED before successful payment reconciliation.
+
+Do not automatically reject a claim merely because it requires manual investigation.
+
+Keep coverage interpretation and settlement decisions configurable and aligned with actual policy terms.
+
+# 13\. Testing Requirements
+
+Create:
+
+## Unit tests
+
+- Event payload validation.
+- Event producer behavior.
+- Event consumer behavior.
+- Policy validation.
+- Claim creation.
+- Adjuster assignment.
+- Damage assessment.
+- Settlement calculation.
+- Approval workflow.
+- Payment processing.
+- Idempotency.
+
+## Integration tests
+
+- FNOL producer to policy consumer.
+- Policy validation to claim creation.
+- Claim creation to adjuster assignment.
+- Assessment to settlement.
+- Approval to payment.
+- Payment success to claim settlement.
+
+## End-to-end tests
+
+Scenario 1: Successful property claim.
+
+FNOLSubmitted → PolicyValidated → ClaimCreated → AdjusterAssigned → DamageAssessmentCompleted → SettlementCalculated → ClaimApproved → PaymentProcessed → ClaimSettled
+
+Scenario 2: Invalid policy.
+
+FNOLSubmitted → PolicyRejected → CustomerNotificationRequested
+
+Scenario 3: Payment failure.
+
+ClaimApproved → PaymentRequested → PaymentFailed → Payment retry → PaymentProcessed → ClaimSettled
+
+Scenario 4: Duplicate event.
+
+Deliver the same event multiple times and verify that the business operation is performed only once.
+
+Use the testing libraries and infrastructure already available in the repository.
+
+# 14\. Documentation Requirements
+
+Generate:
+
+1. Architecture overview.
+2. Module dependency diagram.
+3. Event producer and consumer mapping.
+4. Event payload documentation.
+5. Kafka topic mapping.
+6. Business lifecycle sequence diagram.
+7. Event state transition diagram.
+8. Configuration guide.
+9. Local setup instructions.
+10. Build and deployment instructions.
+11. Testing guide.
+12. Sample event messages.
+
+Explain how the property insurance domain extends the existing Event Platform SDK.
+
+# 15\. Implementation Execution Strategy
+
+Follow this implementation order.
+
+Phase 1: Repository analysis.
+
+- Inspect existing SDK modules.
+- Identify extension points.
+- Produce a dependency and architecture report.
+- Identify gaps.
+
+Phase 2: Domain model.
+
+- Implement property insurance domain entities.
+- Implement typed event payloads.
+- Implement event models using core SDK abstractions.
+
+Phase 3: Producers.
+
+- Implement domain-specific event producers.
+- Integrate with existing publishing framework.
+
+Phase 4: Consumers.
+
+- Implement domain-specific event consumers.
+- Integrate with existing subscription framework.
+
+Phase 5: Business workflows.
+
+- Implement FNOL, policy, claim, assignment, assessment, settlement, and payment services.
+
+Phase 6: Reliability.
+
+- Implement idempotency, retry, DLQ, outbox, and audit integrations.
+
+Phase 7: Testing.
+
+- Implement unit, integration, and end-to-end tests.
+
+Phase 8: Documentation.
+
+- Generate architecture and implementation documentation.
+
+# 16\. Strict Development Rules
+
+- First inspect, then design, then implement.
+- Do not replace the existing Event Platform SDK.
+- Do not duplicate existing core abstractions.
+- Do not make assumptions about SDK interfaces.
+- Do not introduce parallel event infrastructure.
+- Do not break existing modules.
+- Do not modify unrelated functionality.
+- Follow established naming conventions.
+- Keep the implementation modular and reusable.
+- Ensure compilation after each implementation phase.
+- Run existing tests and add new tests.
+- Resolve compilation errors before moving to the next phase.
+- Do not claim functionality is implemented unless the code and tests verify it.
+- If a required capability is missing, document it and propose the smallest compatible change.
+
+# 17\. Expected Final Deliverables
+
+At completion, provide:
+
+1. Repository analysis report.
+2. Proposed architecture and module dependency structure.
+3. List of existing SDK abstractions reused.
+4. List of newly created domain-specific models.
+5. List of producers and consumers implemented.
+6. Complete event payload definitions.
+7. Kafka topic and event mapping.
+8. End-to-end FNOL-to-settlement workflow.
+9. Reliability and exception handling implementation.
+10. Unit and integration test results.
+11. Build results.
+12. Outstanding gaps and recommendations.
+
+**Final objective:** Deliver a production-oriented Property Insurance Claims Event Domain that extends the existing Event Platform SDK cleanly, follows enterprise event-driven architecture practices, and automates the complete FNOL-to-claim-settlement lifecycle without duplicating the platform's core capabilities.
+
+## Recommended module-to-module architecture
+
+The key architectural principle is to keep the existing SDK as the reusable foundation and implement insurance-specific functionality as extensions.
+
+Existing Event Platform SDK
+
+Core Event Model · Producer Framework · Consumer Framework · Serializer · Configuration · Retry · Error Handling
+
+Reuse and extend
+
+Property Insurance Domain SDK
+
+Domain Model
+
+FNOL · Policy · Claim · Assessment · Settlement · Payment
+
+Event Payloads
+
+Typed events · Metadata · Versioning
+
+Domain Producers
+
+FNOL · Policy · Claims · Payment
+
+Domain Consumers
+
+Policy · Claims · Assessment · Settlement
+
+Property Insurance Application
+
+FNOL → Policy Validation → Claim → Adjuster → Assessment → Settlement → Payment
+
+## How I recommend using Copilot
+
+Don't ask Copilot to generate everything in one shot. Use the master prompt above, then give it these follow-up instructions in sequence.
+
+| Step | Copilot instruction |
+| --- | --- |
+| 1 | Analyze the existing SDK and propose the extension architecture. Do not modify code yet. |
+| 2 | Implement the domain models and typed event payloads. |
+| 3 | Implement producers using existing SDK producer abstractions. |
+| 4 | Implement consumers using existing SDK consumer abstractions. |
+| 5 | Implement the complete business workflow. |
+| 6 | Add reliability, idempotency, retry and DLQ handling. |
+| 7 | Implement integration and end-to-end tests. |
+
+## One important architectural recommendation
+
+I would make one additional distinction in your implementation:
+
+- Core SDK: Knows how to publish, consume, serialize, deserialize, retry, and process events.
+- Insurance domain SDK: Knows what `FNOLSubmitted`, `ClaimApproved`, and `PaymentProcessed` mean.
+- Insurance application: Knows how to validate coverage, calculate settlements, assign adjusters, and process business decisions.
+
+This separation ensures the same Event Platform SDK can later support health insurance, auto insurance, and life insurance without modifying its core functionality.
+
+The most important first instruction to Copilot: Inspect the existing SDK and show exactly which base classes, interfaces, and modules will be extended before generating any code. This avoids creating a second event framework inside your existing platform.

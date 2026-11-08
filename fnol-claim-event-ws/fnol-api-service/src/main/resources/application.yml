@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: fnol-api-service
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:local}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+aws:
+  kinesis:
+    fnol-claim-events-stream: ${KINESIS_STREAM_FNOL:fnol-claim-events}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

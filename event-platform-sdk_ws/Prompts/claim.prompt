@@ -1,0 +1,873 @@
+MASTER IMPLEMENTATION PROMPT
+Property Insurance Event-Driven Domain – FNOL to Claim Settlement with Event Replay and Recovery
+1. ROLE AND OBJECTIVE
+
+Act as a Senior Enterprise Solution Architect, Java Spring Boot Developer, Event-Driven Architecture Specialist, Apache Kafka Developer, and Property Insurance Domain Expert.
+
+I have an existing Event Platform SDK that provides reusable core capabilities for event-driven application development.
+
+The SDK contains or may contain reusable modules for:
+
+Core event models and abstractions.
+Event producers and publishers.
+Event consumers and subscribers.
+Kafka integration.
+Event serialization and deserialization.
+Event metadata and headers.
+Event schema management.
+Event configuration.
+Error handling and retry.
+Dead Letter Queue (DLQ).
+Event history and replay.
+Event processing monitoring.
+Correlation and tracing.
+
+Your responsibility is to extend this existing Event Platform SDK to implement a complete Property Insurance Claims domain.
+
+The primary business objective is to automate the complete property insurance claim lifecycle, beginning when a customer reports property damage through First Notice of Loss (FNOL), and ending when the claim is settled and payment is successfully completed.
+
+Additionally, implement domain-specific event replay, recovery, and historical event reprocessing capabilities.
+
+CRITICAL ARCHITECTURAL REQUIREMENT
+
+Do not rebuild, replace, or duplicate existing core Event Platform SDK functionality.
+
+Inspect the existing repository and extend the available interfaces, abstract classes, base implementations, annotations, configurations, utilities, and replay mechanisms.
+
+The Property Insurance domain must be an extension of the existing platform, not a separate event infrastructure.
+
+2. PHASE 1 – EXISTING REPOSITORY ANALYSIS
+
+Before implementing anything, inspect the complete repository.
+
+Identify:
+
+Existing module structure.
+Maven or Gradle dependency hierarchy.
+Core SDK modules and responsibilities.
+Event model interfaces and base classes.
+Producer interfaces and implementations.
+Consumer interfaces and implementations.
+Kafka producer and consumer abstractions.
+Event envelope structure.
+Event metadata conventions.
+Event serialization and deserialization.
+Schema registry integration, if available.
+Topic configuration and management.
+Retry and exception handling.
+Dead Letter Queue implementation.
+Idempotency mechanisms.
+Transactional outbox implementation.
+Event history or event store.
+Event replay capabilities.
+Kafka offset and consumer group management.
+Logging, monitoring, and tracing.
+Security and authentication.
+Existing unit and integration testing patterns.
+
+Identify exactly which existing classes, interfaces, and modules can be extended.
+
+Produce an initial architecture analysis containing:
+
+Existing SDK capabilities.
+Reusable abstractions.
+Missing capabilities.
+Proposed extension points.
+Proposed module dependencies.
+Proposed implementation plan.
+
+Do not modify the repository until this analysis is complete.
+
+3. TARGET ARCHITECTURE
+
+Implement three architectural layers.
+
+Layer 1: Existing Core Event Platform SDK
+
+Responsible for generic event infrastructure:
+
+Event publishing.
+Event consumption.
+Event serialization.
+Event deserialization.
+Event metadata.
+Kafka integration.
+Schema validation.
+Retry handling.
+DLQ processing.
+Event replay engine.
+Event audit infrastructure.
+Event tracing and monitoring.
+
+Keep insurance-specific business rules out of this layer.
+
+Layer 2: Property Insurance Domain SDK
+
+Responsible for property insurance-specific event capabilities:
+
+Property insurance domain models.
+FNOL event models.
+Policy event models.
+Claim event models.
+Adjuster event models.
+Damage assessment event models.
+Settlement event models.
+Payment event models.
+Domain-specific producers.
+Domain-specific consumers.
+Property insurance event payloads.
+Insurance-specific replay policies.
+Claim lifecycle validation.
+Layer 3: Property Insurance Application
+
+Responsible for business workflows:
+
+FNOL submission.
+Policy validation.
+Claim creation.
+Adjuster assignment.
+Damage assessment.
+Settlement calculation.
+Claim approval.
+Payment processing.
+Claim settlement.
+Customer notification.
+Replay administration.
+
+Ensure proper dependency inversion and separation of responsibilities.
+
+4. PROPOSED MODULE STRUCTURE
+
+Adapt this structure to the existing repository conventions.
+
+property-insurance-domain/ | +-- property-insurance-model/ | +-- event/ | +-- payload/ | +-- metadata/ | +-- enumeration/ | +-- constants/ | +-- property-insurance-producer/ | +-- fnol/ | +-- policy/ | +-- claim/ | +-- adjuster/ | +-- assessment/ | +-- settlement/ | +-- payment/ | +-- property-insurance-consumer/ | +-- fnol/ | +-- policy/ | +-- claim/ | +-- adjuster/ | +-- assessment/ | +-- settlement/ | +-- payment/ | +-- notification/ | +-- property-insurance-service/ | +-- application/ | +-- domain/ | +-- repository/ | +-- validation/ | +-- configuration/ | +-- property-insurance-replay/ | +-- model/ | +-- service/ | +-- consumer/ | +-- api/ | +-- audit/ | +-- validation/ | +-- property-insurance-tests/
+
+Do not force this structure if the existing SDK has an established modular architecture. Reuse its conventions.
+
+5. PROPERTY INSURANCE DOMAIN MODELS
+
+Implement strongly typed domain models.
+
+Required models:
+
+Customer
+PropertyPolicy
+InsuredProperty
+FNOL
+InsuranceClaim
+ClaimAssignment
+LossAdjuster
+DamageAssessment
+ClaimDocument
+ClaimSettlement
+ClaimPayment
+ClaimHistory
+
+Define:
+
+Primary identifiers.
+Relationships.
+Mandatory and optional fields.
+Validation rules.
+Lifecycle statuses.
+Business invariants.
+
+Use BigDecimal for monetary values.
+
+Use the existing SDK date/time conventions.
+
+Do not expose unnecessary customer personal information in event payloads.
+
+Use enums for:
+
+DamageType.
+ClaimType.
+ClaimStatus.
+PolicyStatus.
+CoverageType.
+AssessmentStatus.
+SettlementStatus.
+PaymentStatus.
+FNOLStatus.
+ReplayStatus.
+ReplayMode.
+6. DOMAIN EVENT MODEL AND PAYLOAD DESIGN
+
+Create domain-specific event models by extending or implementing existing core SDK event abstractions.
+
+Do not introduce a duplicate event envelope if the SDK already provides one.
+
+Each event should support the existing platform's metadata conventions, including:
+
+Event ID.
+Event type.
+Event version.
+Event timestamp.
+Source.
+Domain.
+Aggregate ID.
+Correlation ID.
+Causation ID.
+Partition key.
+Payload.
+Schema version.
+
+Create immutable, strongly typed event payload classes where appropriate.
+
+Support schema versioning and backward compatibility.
+
+Required events
+FNOL lifecycle
+FNOLSubmitted
+FNOLUpdated
+FNOLDocumentUploaded
+FNOLValidated
+FNOLRejected
+Policy lifecycle
+PolicyValidationRequested
+PolicyValidated
+PolicyRejected
+CoverageVerified
+Claim lifecycle
+ClaimCreationRequested
+ClaimCreated
+ClaimUpdated
+ClaimRejected
+ClaimClosed
+Adjuster lifecycle
+AdjusterAssignmentRequested
+AdjusterAssigned
+AdjusterAssignmentFailed
+Damage assessment lifecycle
+DamageAssessmentRequested
+DamageAssessmentStarted
+DamageAssessmentCompleted
+DamageAssessmentRejected
+Settlement lifecycle
+SettlementCalculationRequested
+SettlementCalculated
+SettlementApprovalRequested
+ClaimApproved
+ClaimRejected
+Payment lifecycle
+PaymentRequested
+PaymentProcessingStarted
+PaymentProcessed
+PaymentFailed
+PaymentReconciled
+Final lifecycle
+ClaimSettled
+ClaimSettlementFailed
+CustomerNotificationRequested
+
+For each event, document:
+
+Business purpose.
+Event producer.
+Expected consumers.
+Payload attributes.
+Required validation.
+Next expected business event.
+Replay behavior.
+Idempotency requirements.
+7. SAMPLE EVENT PAYLOADS
+
+Use these illustrative payloads and adapt the metadata envelope to the existing SDK.
+
+FNOLSubmitted
+
+{ "fnolId": "FNOL10001", "policyId": "POL20001", "propertyId": "PROP40001", "customerReference": "CUS30001", "damageType": "STORM", "incidentDate": "2026-11-07", "reportedDate": "2026-11-08", "description": "Roof damaged due to severe storm", "estimatedLoss": 15000.00, "currency": "USD" }
+
+PolicyValidated
+
+{ "fnolId": "FNOL10001", "policyId": "POL20001", "policyStatus": "ACTIVE", "coverageType": "HOMEOWNERS", "coverageLimit": 250000.00, "deductible": 1000.00, "coverageConfirmed": true }
+
+ClaimCreated
+
+{ "claimId": "CLM30001", "fnolId": "FNOL10001", "policyId": "POL20001", "claimType": "PROPERTY_DAMAGE", "claimStatus": "OPEN", "estimatedLoss": 15000.00, "currency": "USD" }
+
+AdjusterAssigned
+
+{ "claimId": "CLM30001", "adjusterId": "ADJ50001", "assignmentStatus": "ASSIGNED" }
+
+DamageAssessmentCompleted
+
+{ "assessmentId": "ASM60001", "claimId": "CLM30001", "damageType": "ROOF_DAMAGE", "approvedRepairEstimate": 12000.00, "currency": "USD", "assessmentStatus": "COMPLETED" }
+
+SettlementCalculated
+
+{ "claimId": "CLM30001", "approvedDamageAmount": 12000.00, "deductible": 1000.00, "depreciation": 0.00, "settlementAmount": 11000.00, "currency": "USD" }
+
+ClaimApproved
+
+{ "claimId": "CLM30001", "approvalStatus": "APPROVED", "approvedAmount": 11000.00 }
+
+PaymentProcessed
+
+{ "paymentId": "PAY70001", "claimId": "CLM30001", "paymentAmount": 11000.00, "currency": "USD", "paymentStatus": "SUCCESS", "paymentReference": "PAYREF70001" }
+
+ClaimSettled
+
+{ "claimId": "CLM30001", "fnolId": "FNOL10001", "settlementAmount": 11000.00, "currency": "USD", "claimStatus": "SETTLED", "paymentId": "PAY70001" }
+
+Create actual Java payload classes, not generic Map-based models.
+
+8. DOMAIN-SPECIFIC EVENT PRODUCERS
+
+Implement domain producers using existing Event Platform SDK producer interfaces and base implementations.
+
+Required producers:
+
+FnolEventProducer
+PolicyEventProducer
+ClaimEventProducer
+AdjusterEventProducer
+DamageAssessmentEventProducer
+SettlementEventProducer
+PaymentEventProducer
+NotificationEventProducer
+
+Producer responsibilities:
+
+Accept strongly typed domain events.
+Extend or implement the existing SDK producer abstraction.
+Populate event metadata.
+Serialize using the existing SDK serializer.
+Publish through the existing event publishing mechanism.
+Use configured topics.
+Propagate correlation and causation identifiers.
+Support event schema versions.
+Handle publishing errors using existing SDK mechanisms.
+Provide unit-testable interfaces.
+
+Do not use KafkaTemplate directly if the SDK already provides an appropriate producer abstraction.
+
+Keep producers focused on event publication rather than business processing.
+
+9. DOMAIN-SPECIFIC EVENT CONSUMERS
+
+Implement domain consumers using existing SDK consumer interfaces, annotations, or base classes.
+
+Required consumers:
+
+FnolEventConsumer
+PolicyEventConsumer
+ClaimEventConsumer
+AdjusterEventConsumer
+DamageAssessmentEventConsumer
+SettlementEventConsumer
+PaymentEventConsumer
+NotificationEventConsumer
+
+Consumer responsibilities:
+
+Subscribe using existing SDK configuration.
+Deserialize into strongly typed events.
+Validate event envelope and payload.
+Invoke application/domain services.
+Persist business state where necessary.
+Publish subsequent business events.
+Support idempotency.
+Support retries and DLQ.
+Preserve correlation and causation IDs.
+Record processing audit history.
+
+Do not place all business logic inside consumer classes.
+
+Use dedicated application services and domain services.
+
+10. END-TO-END FNOL-TO-SETTLEMENT BUSINESS WORKFLOW
+
+Implement the complete business workflow.
+
+Step 1: FNOL submission
+
+Customer reports property damage through mobile app, website, or call center.
+
+FNOL Service:
+
+Validate request.
+Generate FNOL ID.
+Store FNOL.
+Publish FNOLSubmitted.
+Step 2: Policy validation
+
+Policy Service:
+
+Validate policy status.
+Check incident date against coverage period.
+Validate insured property.
+Verify coverage and exclusions.
+Publish PolicyValidated or PolicyRejected.
+Step 3: Claim creation
+
+Claims Service:
+
+Consume PolicyValidated.
+Create claim.
+Generate Claim ID.
+Store claim.
+Publish ClaimCreated.
+Step 4: Adjuster assignment
+
+Assignment Service:
+
+Receive ClaimCreated.
+Identify suitable adjuster.
+Assign adjuster.
+Publish AdjusterAssigned.
+Step 5: Damage assessment
+
+Assessment Service:
+
+Receive assignment/assessment request.
+Record inspection results.
+Upload supporting documents.
+Publish DamageAssessmentCompleted.
+Step 6: Settlement calculation
+
+Settlement Service:
+
+Validate coverage.
+Calculate covered loss.
+Apply deductible.
+Apply depreciation where relevant.
+Apply policy limits and sublimits.
+Calculate proposed settlement.
+Publish SettlementCalculated.
+Step 7: Approval
+
+Approval Service:
+
+Validate settlement.
+Enforce approval authority.
+Record approval decision.
+Publish ClaimApproved or ClaimRejected.
+Step 8: Payment
+
+Payment Service:
+
+Consume approved payment request.
+Check payment idempotency.
+Process payment through the configured payment integration.
+Publish PaymentProcessed or PaymentFailed.
+Step 9: Claim settlement
+
+Claims Service:
+
+Consume PaymentProcessed and applicable reconciliation confirmation.
+Update claim status.
+Record settlement.
+Publish ClaimSettled.
+Step 10: Customer notification
+
+Notification Service:
+
+Consume CustomerNotificationRequested.
+Send email, SMS, or portal notification.
+Record notification outcome.
+
+Use configurable business rules and avoid assuming that every claim follows an identical straight-through workflow.
+
+11. KAFKA TOPIC CONFIGURATION
+
+Use existing SDK topic management and configuration conventions.
+
+Suggested topics:
+
+property.fnol.events
+property.policy.events
+property.claim.events
+property.adjuster.events
+property.assessment.events
+property.settlement.events
+property.payment.events
+property.notification.events
+
+Centralize topic configuration.
+
+Avoid hardcoding topic names throughout the application.
+
+Use:
+
+claimId as partition key after claim creation.
+fnolId before claim creation.
+
+Maintain ordering for events belonging to the same claim.
+
+Document consumer groups and topic subscriptions.
+
+12. EVENT-DRIVEN WORKFLOW ORCHESTRATION
+
+Use the existing platform orchestration mechanism if available.
+
+Otherwise implement the minimum necessary coordination mechanism using the Saga pattern.
+
+The business workflow must support:
+
+Successful claim progression.
+Policy rejection.
+Duplicate FNOL detection.
+Adjuster assignment failure.
+Assessment failure.
+Manual approval.
+Claim rejection.
+Payment failure.
+Payment retry.
+Payment reconciliation.
+Claim closure.
+
+Do not assume all operations execute in one distributed transaction.
+
+Maintain explicit business state transitions.
+
+13. EVENT REPLAY AND RECOVERY FRAMEWORK
+
+Implement a property insurance-specific replay and recovery layer by extending the existing SDK replay capabilities.
+
+First inspect the SDK for:
+
+Event history storage.
+Replay APIs.
+Replay interfaces.
+Offset management.
+Historical event retrieval.
+Consumer group handling.
+DLQ recovery.
+Event ordering.
+Replay audit.
+Replay metadata.
+
+Do not introduce a duplicate replay engine.
+
+13.1 Replay components
+
+Implement or extend appropriate components:
+
+PropertyInsuranceReplayService
+ClaimEventReplayService
+FnolEventReplayService
+ReplayRequest
+ReplayCriteria
+ReplayExecution
+ReplayResult
+ReplayStatus
+ReplayEventValidator
+ReplayAuditService
+
+Adapt naming and responsibilities to the existing SDK.
+
+13.2 Replay scenarios
+Scenario A: Single FNOL replay
+
+A FNOL event was published, but claim creation did not complete because of a consumer defect.
+
+Replay FNOLSubmitted and verify that policy validation and claim creation complete successfully.
+
+Scenario B: Claim-level replay
+
+Replay all events for a specific claim.
+
+Example:
+
+ClaimCreated → AdjusterAssigned → DamageAssessmentCompleted → SettlementCalculated → ClaimApproved → PaymentProcessed → ClaimSettled
+
+Requirements:
+
+Select by claimId.
+Preserve original event ordering.
+Validate event sequence.
+Preserve original event references.
+Prevent duplicate business operations.
+Support pause and resume.
+Scenario C: Date-range replay
+
+Recover FNOL events affected by a system outage.
+
+Support:
+
+Start timestamp.
+End timestamp.
+Event type filtering.
+Domain filtering.
+Replay preview.
+Execution summary.
+Scenario D: DLQ replay
+
+Recover failed events.
+
+Requirements:
+
+Select DLQ events by claim ID, event ID, and event type.
+Validate the original payload.
+Confirm the underlying failure is resolved.
+Reprocess through the original domain consumer.
+Track replay attempts.
+Maintain failure history.
+Scenario E: Consumer-version replay
+
+A new Settlement Service version fixes a calculation defect.
+
+Requirements:
+
+Replay selected historical events using the new consumer version.
+Preserve the original event data.
+Support dry-run comparison.
+Record consumer version.
+Do not overwrite approved settlements automatically.
+Require authorized business approval for recalculation.
+Scenario F: Downstream outage recovery
+
+Recover events affected by notification or external assessment system outages.
+
+Replay only affected event types.
+
+Do not replay unrelated business workflows.
+
+Scenario G: Full claim lifecycle reconstruction
+
+Reconstruct the event history and current claim projection using historical events.
+
+Identify missing events, inconsistent transitions, and data discrepancies.
+
+Do not repeat external financial side effects.
+
+13.3 Replay modes
+
+Implement:
+
+DRY_RUN
+
+Retrieve events.
+Validate schemas.
+Validate event ordering.
+Identify duplicates.
+Identify potential side effects.
+Generate preview.
+Do not change business state.
+
+REPROCESS
+
+Reprocess eligible historical events through appropriate domain consumers.
+Apply idempotency.
+Record execution results.
+Protect external side effects.
+
+RECOVERY
+
+Reprocess previously failed events.
+Use existing retry and DLQ mechanisms.
+
+PROJECTION_REBUILD
+
+Reconstruct read models from historical events.
+Use an isolated rebuild target.
+Do not modify authoritative financial records.
+Support comparison and controlled replacement.
+13.4 Replay request model
+
+Illustrative request:
+
+{ "replayRequestId": "RPL10001", "domain": "PROPERTY_INSURANCE", "replayType": "CLAIM", "claimId": "CLM30001", "replayMode": "DRY_RUN", "fromEventType": "ClaimCreated", "toEventType": "ClaimSettled", "reason": "Consumer defect correction", "requestedBy": "ADMIN100", "applicationVersion": "2.0.0" }
+
+Support selection by:
+
+EVENT_ID
+FNOL_ID
+CLAIM_ID
+EVENT_TYPE
+DATE_RANGE
+CORRELATION_ID
+DLQ_EVENT
+REPLAY_EXECUTION_ID
+13.5 Replay metadata
+
+Extend existing metadata conventions.
+
+Illustrative metadata:
+
+{ "replay": { "isReplay": true, "replayRequestId": "RPL10001", "replayExecutionId": "RPE20001", "originalEventId": "EVT10001", "originalEventTimestamp": "2026-11-08T12:00:00Z", "replayedAt": "2026-11-08T14:00:00Z", "replayMode": "REPROCESS", "replayAttempt": 1, "consumerVersion": "2.0.0" } }
+
+Preserve original event identity and timestamp.
+
+Distinguish original events from replay executions.
+
+Prevent replay loops.
+
+13.6 Replay APIs
+
+Implement using existing API and security conventions.
+
+POST /api/property-insurance/replay
+
+GET /api/property-insurance/replay/{replayRequestId}
+
+GET /api/property-insurance/replay/{replayRequestId}/results
+
+POST /api/property-insurance/replay/{replayRequestId}/resume
+
+POST /api/property-insurance/replay/{replayRequestId}/cancel
+
+GET /api/property-insurance/claims/{claimId}/event-history
+
+POST /api/property-insurance/replay/dlq
+
+These are proposed contracts. Adapt them to the repository's existing conventions.
+
+13.7 Replay statuses
+
+Execution statuses:
+
+REQUESTED
+VALIDATING
+VALIDATED
+RUNNING
+PAUSED
+COMPLETED
+PARTIALLY_COMPLETED
+FAILED
+CANCELLED
+
+Individual event statuses:
+
+PENDING
+PROCESSING
+SUCCESS
+SKIPPED
+FAILED
+DUPLICATE
+REQUIRES_MANUAL_REVIEW
+13.8 Event ordering
+
+Use:
+
+Aggregate ID.
+Original event timestamp.
+Aggregate sequence number, if available.
+Causation ID.
+Business event dependencies.
+
+Do not rely solely on timestamps.
+
+Ensure claim lifecycle events are processed in valid business order.
+
+If historical event ordering information is insufficient, flag the affected replay for validation or manual review.
+
+14. CRITICAL PAYMENT AND FINANCIAL SAFETY
+
+Replay must never cause duplicate financial transactions.
+
+Implement:
+
+Unique payment idempotency keys.
+Payment transaction reference verification.
+Authoritative payment status reconciliation.
+Immutable financial audit history.
+Protection against duplicate PaymentRequested processing.
+Protection against repeated PaymentProcessed side effects.
+Authorized settlement recalculation.
+Separation of historical events from new business commands.
+Notification deduplication.
+Explicit claim state validation.
+
+A replayed PaymentProcessed event should normally reconstruct or verify the payment state, not execute another payment.
+
+A replayed PaymentRequested event must check the authoritative payment reference before initiating any external operation.
+
+An approved claim must not have its settlement amount automatically overwritten during replay.
+
+For failed payment processing, preserve the approved claim state until payment is reconciled.
+
+15. RELIABILITY AND ERROR HANDLING
+
+Reuse existing SDK reliability mechanisms.
+
+Implement or extend:
+
+Idempotent consumers.
+Duplicate event detection.
+Transactional outbox.
+Retry policies.
+DLQ recovery.
+Schema validation.
+Event version compatibility.
+Correlation ID propagation.
+Causation ID propagation.
+Structured logging.
+Replay audit.
+Event processing audit.
+
+Ensure that events are not silently lost.
+
+Ensure failed processing can be investigated and recovered.
+
+Document any limitations in the existing platform's delivery guarantees.
+
+16. BUSINESS VALIDATION RULES
+
+Implement the following validations:
+
+FNOL must reference a valid policy.
+Policy must be active on the incident date.
+Insured property must match the policy.
+Incident date must satisfy policy terms.
+Duplicate claims must be detected or flagged.
+Claim amounts must be non-negative.
+Assessment must be completed before settlement calculation.
+Approval must precede payment.
+Payment must not exceed the approved settlement.
+Claim must not be marked settled before successful payment reconciliation.
+
+Do not automatically reject claims that require further investigation.
+
+Use configurable policy terms, exclusions, deductibles, limits, and settlement rules.
+
+17. SECURITY AND AUDIT
+
+Implement or reuse existing security mechanisms.
+
+Requirements:
+
+Secure administrative replay APIs.
+Role-based access control.
+Replay authorization.
+Approval requirements for financial recalculation.
+Sensitive data protection.
+Encryption in transit and at rest.
+Audit trail for business decisions.
+Audit trail for replay requests and executions.
+No unnecessary PII in event payloads or logs.
+18. TESTING REQUIREMENTS
+
+Create comprehensive unit, integration, and end-to-end tests.
+
+18.1 Unit tests
+Domain model validation.
+Event payload validation.
+Event metadata generation.
+Producer behavior.
+Consumer behavior.
+Policy validation.
+Claim creation.
+Adjuster assignment.
+Damage assessment.
+Settlement calculation.
+Approval workflow.
+Payment processing.
+Idempotency.
+Replay selection.
+Replay validation.
+Replay audit.
+18.2 Integration tests
+FNOL producer to policy consumer.
+Policy validation to claim creation.
+Claim creation to adjuster assignment.
+Assessment to settlement.
+Approval to payment.
+Payment success to claim settlement.
+Replay service to existing SDK replay engine.
+DLQ recovery to domain consumer.
+18.3 End-to-end business scenarios
+Test 1: Successful property claim
+
+FNOLSubmitted → PolicyValidated → ClaimCreated → AdjusterAssigned → DamageAssessmentCompleted → SettlementCalculated → ClaimApproved → PaymentProcessed → ClaimSettled

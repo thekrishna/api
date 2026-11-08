@@ -1,0 +1,11 @@
+project_name = "fnol"
+environment  = "test"
+aws_region   = "us-east-1"
+
+kinesis_stream_names = ["fnol-claim-events", "fnol-document-events", "fnol-processing-events"]
+kinesis_shard_count = 2
+kinesis_retention_hours = 72
+kinesis_stream_mode = "PROVISIONED"
+
+cloudwatch_log_retention_days = 90
+enable_dead_letter_queue = true

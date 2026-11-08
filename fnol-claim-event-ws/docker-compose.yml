@@ -1,0 +1,51 @@
+version: '3.9'
+
+services:
+  localstack:
+    image: localstack/localstack:3.7.0
+    container_name: fnol-localstack
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+    environment:
+      SERVICES: dynamodb,kinesis,logs
+      DEBUG: 1
+      AWS_DEFAULT_REGION: us-east-1
+      LS_LOG: warn
+      HOSTNAME_EXTERNAL: localstack
+    volumes:
+      - ./infrastructure/docker/localstack:/docker-entrypoint-initaws.d
+      - ./infrastructure/dynamodb:/tmp/dynamodb
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:4566/_localstack/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  fnol-api-service:
+    build:
+      context: ./fnol-api-service
+    container_name: fnol-api-service
+    depends_on:
+      localstack:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      AWS_REGION: us-east-1
+      AWS_ENDPOINT_URL: http://localstack:4566
+    ports:
+      - "8080:8080"
+
+  fnol-query-service:
+    build:
+      context: ./fnol-query-service
+    container_name: fnol-query-service
+    depends_on:
+      localstack:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: local
+      AWS_REGION: us-east-1
+      AWS_ENDPOINT_URL: http://localstack:4566
+    ports:
+      - "8081:8081"
