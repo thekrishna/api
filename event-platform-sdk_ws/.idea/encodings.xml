@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/event-driven-sqs/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-driven-sqs/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-consumer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-consumer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-core/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-core/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-dynamodb/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-dynamodb/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-exception/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-exception/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-kinesis/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-kinesis/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-model/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-model/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-producer/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-producer/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-replay/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-replay/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-samples/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-samples/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-sqs/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/event-platform-sqs/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>
